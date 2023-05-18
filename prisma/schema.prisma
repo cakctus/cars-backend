@@ -30,6 +30,7 @@ model User {
   refreshToken      String?
   resetPasswordLink String?
   Token             Token[]
+  Message           Message[]
 }
 
 model Token {
@@ -37,4 +38,19 @@ model Token {
   refreshToken String @unique
   user         User   @relation(fields: [userId], references: [id])
   userId       Int
+}
+
+model Message {
+  id        Int       @id @default(autoincrement())
+  message   String
+  users     Int[]     @default([1, 1])
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    Int?
+  createdAt DateTime? @default(now())
+}
+
+model Chat {
+  id     Int   @id @default(autoincrement())
+  myId   Int
+  userId Int[]
 }

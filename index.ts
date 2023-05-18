@@ -11,6 +11,7 @@ import { PrismaClient } from "@prisma/client"
 import errorMiddleware from "./middleware/errors/errorMiddleware"
 // routes
 import authRoutes from "./routes/auth/authRouter"
+import chatRoutes from "./routes/chat/chatRoutes"
 
 const PORT = process.env.PORT || 5000
 const prisma = new PrismaClient()
@@ -24,11 +25,12 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
   })
 )
 // routes
 app.use("/api", authRoutes)
+app.use("/api/chat", chatRoutes)
 app.use(errorMiddleware)
 
 const start = async () => {
