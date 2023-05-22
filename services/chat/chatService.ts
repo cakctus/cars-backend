@@ -7,33 +7,75 @@ class ChatService {
     const chat = await prisma.chat.create({
       data: {
         myId: myId,
-        userId: [myId, id],
+        oponentId: id,
+        usersId: [myId, id],
+        user: {
+          connect: {
+            id: id,
+          },
+        },
       },
     })
     return chat
   }
 
-  async myChatsService(myId: number) {
+  async myChatsService(myId: number, userId: number) {
+    // owner
     const chats = await prisma.chat.findMany({
       where: {
         myId,
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            username: false,
+          },
+        },
+      },
     })
-    const arrayOfChats = chats.map((chat) => chat.userId)
-    const arr = arrayOfChats.flat()
+    const c = chats.map((chat) => chat.user)
+
+    // oponent
+    const chatsOponent = await prisma.chat.findMany({
+      where: {
+        oponentId: myId,
+      },
+    })
+    const arrayOfChats = chatsOponent.map((chat) => chat.myId)
     const users = await prisma.user.findMany({
-      // where: {
-      //   id: { in: arr },
-      // },
       where: {
         id: {
-          in: arr,
+          in: arrayOfChats,
           notIn: myId,
         },
       },
     })
-    if (chats) return users
-    return []
+
+    const finalArray = [...c, ...users]
+
+    const uniqueData = finalArray.reduce((acc: any, obj: any) => {
+      const found = acc.find((item: any) => item.id === obj.id)
+      if (!found) {
+        acc.push(obj)
+      }
+      return acc
+    }, [])
+
+    return uniqueData
+
+    // return {
+    //   owner: c,
+    //   oponent: users,
+    // }
+
+    // if (isNaN(userId)) {
+    //   // if (chatsOponent) {
+    //   return users
+    //   // }
+    // }
+    // return c
   }
 
   async addMessageService(from: any, to: any, message: string) {
@@ -73,15 +115,19 @@ class ChatService {
       where: {
         users: {
           hasEvery: [from, to],
+          // hasEvery: [from],
         },
       },
     })
-    console.log(from, to)
-    console.log(messages)
+    // console.log(from, to)
+    // console.log(messages)
     const msg = messages.map((message) => {
       return {
         fromSelf: message!.user!.id === from,
         message: message.message,
+        id: message.id,
+        createdAt: message.createdAt,
+        read: message.read,
       }
     })
     return msg

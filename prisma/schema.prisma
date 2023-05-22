@@ -31,6 +31,7 @@ model User {
   resetPasswordLink String?
   Token             Token[]
   Message           Message[]
+  Chat              Chat[]
 }
 
 model Token {
@@ -47,10 +48,14 @@ model Message {
   user      User?     @relation(fields: [userId], references: [id])
   userId    Int?
   createdAt DateTime? @default(now())
+  read      Boolean   @default(false)
 }
 
 model Chat {
-  id     Int   @id @default(autoincrement())
-  myId   Int
-  userId Int[]
+  id        Int   @id @default(autoincrement())
+  myId      Int
+  oponentId Int
+  usersId   Int[]
+  user      User? @relation(fields: [userId], references: [id])
+  userId    Int?
 }

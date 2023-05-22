@@ -61,7 +61,7 @@ class User {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       })
-      console.log(data, "Data")
+      // console.log(data, "Data")
       return res.json(data)
     } catch (error) {
       next(error)
