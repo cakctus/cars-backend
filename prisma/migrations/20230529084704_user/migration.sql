@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "countryCode" INTEGER NOT NULL DEFAULT 373,
+ADD COLUMN     "firstName" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "lastName" TEXT NOT NULL DEFAULT '';

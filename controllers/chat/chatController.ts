@@ -16,7 +16,7 @@ class ChatController {
   async myChats(req: Request, res: Response, next: NextFunction) {
     try {
       const { myId, userId } = req.params
-      console.log(req.params, "params")
+      // console.log(req.params, "params")
       const response = await ChatService.myChatsService(
         Number(myId),
         Number(userId)
@@ -41,6 +41,32 @@ class ChatController {
     try {
       const { from, to } = req.body
       const response = await ChatService.getMessageService(from, to)
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async chatIsRead(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { myId, oponentId } = req.params
+      const response = await ChatService.chatIsReadService(
+        Number(myId),
+        Number(oponentId)
+      )
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async chatUnread(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { myId, oponentId } = req.params
+      const response = await ChatService.chatIsUnreadService(
+        Number(myId),
+        Number(oponentId)
+      )
       return res.status(200).json(response)
     } catch (error) {
       next(error)

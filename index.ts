@@ -12,6 +12,8 @@ import errorMiddleware from "./middleware/errors/errorMiddleware"
 // routes
 import authRoutes from "./routes/auth/authRouter"
 import chatRoutes from "./routes/chat/chatRoutes"
+import profileRoutes from "./routes/profile/profileRoutes"
+
 // socket.io
 import { Server } from "socket.io"
 // http
@@ -25,6 +27,7 @@ const server = createServer(app)
 
 // middleware
 app.use(express.json())
+app.use("/media", express.static("media"))
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(
@@ -36,6 +39,7 @@ app.use(
 // routes
 app.use("/api", authRoutes)
 app.use("/api/chat", chatRoutes)
+app.use("/api/profile", profileRoutes)
 app.use(errorMiddleware)
 
 const start = async () => {
@@ -59,40 +63,39 @@ start()
     process.exit(1)
   })
 
-server.listen(5001, () => {
-  console.log("server is running")
-})
+// server.listen(5001, () => {
+//   console.log("server is running")
+// })
 
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
-})
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   },
+// })
 
-// @ts-ignore
-global.onlineUsers = new Map()
+// // @ts-ignore
+// global.onlineUsers = new Map()
 
-io.on("connection", (socket) => {
-  // console.log("connect")
-  // @ts-ignore
-  global.chatSocket = socket
-  socket.on("add-user", (userId) => {
-    // @ts-ignore
-    onlineUsers.set(userId, socket.id)
-  })
+// io.on("connection", (socket) => {
+//   // @ts-ignore
+//   global.chatSocket = socket
+//   socket.on("add-user", (userId) => {
+//     // @ts-ignore
+//     onlineUsers.set(userId, socket.id)
+//   })
 
-  socket.on("send-msg", (data) => {
-    console.log("send", data)
-    // @ts-ignore
-    const sendUserSocket = onlineUsers.get(data.to)
-    console.log(sendUserSocket)
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-receive", data.message)
-      console.log(data, "receive")
-    }
-  })
-})
+//   socket.on("send-msg", (data) => {
+//     console.log("send msg", data)
+//     // @ts-ignore
+//     const sendUserSocket = onlineUsers.get(data.to)
+//     console.log(sendUserSocket)
+//     if (sendUserSocket) {
+//       socket.to(sendUserSocket).emit("msg-receive", data.message)
+//       console.log(data, "receive")
+//     }
+//   })
+// })
 
 // @ts-ignore
 // console.log(onlineUsers)

@@ -9,7 +9,7 @@ import UserDto from "../../dto/userDto"
 const prisma = new PrismaClient()
 
 class AuthService {
-  async reg(email: string, role: string, password: string | Buffer) {
+  async reg(email: string, seller: string, password: string | Buffer) {
     // check if user already exists
     const candidate = await prisma.user.findUnique({
       where: {
@@ -29,7 +29,7 @@ class AuthService {
         password: hash,
         activationLink,
         dateJoined: new Date(),
-        role: role,
+        seller: seller,
       },
     })
     // user dto
@@ -117,10 +117,15 @@ class AuthService {
       refreshToken: "",
       dateJoined: user.dateJoined,
       userPhoto: user.userPhoto,
+      userProfilePhoto: user!.userProfilePhoto,
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
       isStaff: user.isStaff,
+      countryCode: user!.countryCode,
+      number: user!.number,
+      seller: user!.seller,
+      comunicationMethod: user!.comunicationMethod,
 
       set setAccesToken(value: string) {
         this.accessToken = value
@@ -170,10 +175,15 @@ class AuthService {
       refreshToken: "",
       dateJoined: user!.dateJoined,
       userPhoto: user!.userPhoto,
+      userProfilePhoto: user!.userProfilePhoto,
       username: user!.username,
       firstName: user!.firstName,
       lastName: user!.lastName,
       isStaff: user!.isStaff,
+      countryCode: user!.countryCode,
+      number: user!.number,
+      seller: user!.seller,
+      comunicationMethod: user!.comunicationMethod,
 
       set setAccesToken(value: string) {
         this.accessToken = value

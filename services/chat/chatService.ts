@@ -4,19 +4,142 @@ const prisma = new PrismaClient()
 
 class ChatService {
   async addIdService(myId: number, id: number) {
-    const chat = await prisma.chat.create({
-      data: {
-        myId: myId,
-        oponentId: id,
-        usersId: [myId, id],
-        user: {
-          connect: {
-            id: id,
-          },
+    const chats1 = await prisma.chat.findMany({
+      where: {
+        usersId: {
+          hasEvery: [myId, id],
         },
       },
     })
-    return chat
+
+    const chats2 = await prisma.chat.findMany({
+      where: {
+        usersId: {
+          hasEvery: [id, myId],
+        },
+      },
+    })
+    if (chats1.length && chats2.length) {
+      const updateChat1 = await prisma.chat.updateMany({
+        where: {
+          myId,
+        },
+        data: {
+          myId: myId,
+          oponentId: id,
+          usersId: [myId, id],
+          userId: id,
+        },
+      })
+      const updateChat2 = await prisma.chat.updateMany({
+        where: {
+          id,
+        },
+        data: {
+          myId: id,
+          oponentId: id,
+          usersId: [id, myId],
+          userId: myId,
+        },
+      })
+      return {
+        updateChat1,
+        updateChat2,
+      }
+    }
+    if (!chats1.length && !chats2.length) {
+      const createChat = await prisma.chat.create({
+        data: {
+          myId: myId,
+          oponentId: id,
+          usersId: [myId, id],
+          user: {
+            connect: {
+              id: id,
+            },
+          },
+        },
+      })
+
+      const createChat2 = await prisma.chat.create({
+        data: {
+          myId: id,
+          oponentId: myId,
+          usersId: [id, myId],
+          user: {
+            connect: {
+              id: myId,
+            },
+          },
+        },
+      })
+      return {
+        createChat,
+        createChat2,
+      }
+    }
+  }
+
+  async chatIsReadService(myId: number, oponentId: number) {
+    // const chats = await prisma.chat.findMany({
+    //   where: {
+    //     usersId: {
+    //       hasEvery: [myId, oponentId],
+    //     },
+    //   },
+    // })
+    // const chats = await prisma.chat.findMany({
+    //   where: {
+    //     // usersId: {
+    //     //   hasSome: [myId, oponentId],
+    //     // },
+    //     oponentId,
+    //   },
+    // })
+    // if (chats.length) {
+    const updateChat = await prisma.chat.updateMany({
+      where: {
+        usersId: {
+          hasEvery: [myId, oponentId],
+        },
+        userId: myId,
+      },
+      // where: {
+      //   AND: [
+      //     {
+      //       usersId: {
+      //         hasEvery: [myId, oponentId],
+      //       },
+      //     },
+      //     {
+      //       myId,
+      //     },
+      //   ],
+      // },
+      data: {
+        oponentReadChat: true,
+      },
+    })
+
+    return updateChat
+    // }
+  }
+
+  async chatIsUnreadService(myId: number, oponentId: number) {
+    const updateChat = await prisma.chat.updateMany({
+      where: {
+        usersId: {
+          hasEvery: [oponentId, myId],
+        },
+        userId: oponentId,
+      },
+
+      data: {
+        oponentReadChat: false,
+      },
+    })
+
+    return updateChat
   }
 
   async myChatsService(myId: number, userId: number) {
@@ -35,7 +158,41 @@ class ChatService {
         },
       },
     })
-    const c = chats.map((chat) => chat.user)
+    // const c = chats.map((chat) => chat.user)
+    const c = chats.map((chat) => ({
+      id: chat!.user!.id,
+      email: chat!.user!.email,
+      oponentReadChat: chat.oponentReadChat,
+    }))
+    const usersId = chats.map((chat) => Number(chat.oponentId))
+
+    const lastMessages = await prisma.message.findMany({
+      where: {
+        users: {
+          hasSome: usersId,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 1,
+      distinct: ["users"], // Use distinct instead of groupBy
+      select: {
+        id: true,
+        message: true,
+        users: true,
+        user: true,
+        userId: true,
+        createdAt: true,
+        read: true,
+      },
+    })
+
+    // console.log(c, "c")
+    // console.log(c, "cc")
+    // console.log(usersId)
+    // console.log(lastMessages)
+    // console.log(ownerMsg, "ownerMsg")
 
     // oponent
     const chatsOponent = await prisma.chat.findMany({
@@ -63,6 +220,7 @@ class ChatService {
       return acc
     }, [])
 
+    // console.log(finalArray)
     return uniqueData
 
     // return {
