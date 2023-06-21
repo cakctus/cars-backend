@@ -2,7 +2,7 @@ import multer from "multer"
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "media/profile/users")
+    cb(null, "media/pics/users")
   },
   filename: (req, file, cb) => {
     const name = file.originalname

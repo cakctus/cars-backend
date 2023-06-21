@@ -3,9 +3,15 @@ import { unlink } from "node:fs/promises"
 import { fileURLToPath } from "url"
 import { dirname, basename, extname, join } from "path"
 
+import ApiError from "../../exceptions/apiError"
+
 import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
+
+interface UserDto {
+  [key: string]: any
+}
 
 class ProfileService {
   async getCountryCodes() {
@@ -22,9 +28,57 @@ class ProfileService {
       userPhoto,
       userProfilePhoto,
       isStaff,
-      ...data
+      numbers,
+      // number,
+      ...userDto
     } = body
     const id = Number(body.userId)
+
+    const data: UserDto = Object.entries(userDto).reduce(
+      (acc, [key, value]: [string, any]) => {
+        if (value !== null) {
+          acc[key] = String(value)
+        }
+        return acc
+      },
+      {} as UserDto
+    )
+
+    // const { username } = userDto
+
+    // if (username) {
+    //   const user = await prisma.user.findFirst({
+    //     where: {
+    //       username,
+    //     },
+    //   })
+    //   if (user) {
+    //     throw ApiError.BadRequest
+    //   }
+    // }
+
+    const { number } = userDto
+
+    if (number) {
+      const n = await prisma.number.findFirst({
+        where: {
+          number: String(number),
+        },
+      })
+      if (n) {
+        throw ApiError.NumberAlreadyExists("Number already exists.")
+      }
+      const createdNumber = await prisma.number.create({
+        data: {
+          number: String(number),
+          User: {
+            connect: {
+              id,
+            },
+          },
+        },
+      })
+    }
 
     const user = await prisma.user.update({
       where: {
@@ -33,8 +87,7 @@ class ProfileService {
       data,
     })
 
-    if (files["userPhoto"][0].fieldname === "userPhoto") {
-      console.log("?")
+    if (files["userPhoto"] && files["userPhoto"][0].fieldname === "userPhoto") {
       const { filename, destination, path } = files["userPhoto"][0]
       const fName = filename?.replace(/\s+/g, "_")
       const user = await prisma.user.findUnique({
@@ -72,7 +125,10 @@ class ProfileService {
         },
       })
     }
-    if (files.userProfilePhoto[0].fieldname === "userProfilePhoto") {
+    if (
+      files["userProfilePhoto"] &&
+      files.userProfilePhoto[0].fieldname === "userProfilePhoto"
+    ) {
       const { filename, destination, path } = files["userProfilePhoto"][0]
       const fName = filename?.replace(/\s+/g, "_")
       const user = await prisma.user.findUnique({
@@ -220,6 +276,74 @@ class ProfileService {
       },
     })
     return userUpdate
+  }
+
+  async updatecomunicationMethodService(
+    userId: any,
+    comunicationMethod: string
+  ) {
+    console.log(comunicationMethod)
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!user) throw ApiError.BadRequest("User does not exist")
+
+    if (user) {
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          comunicationMethod,
+        },
+      })
+      if (updatedUser) {
+        return updatedUser
+      }
+    }
+  }
+
+  async addPhoneService(userId: any, number: any) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!user) throw ApiError.BadRequest("User does not exist")
+
+    if (user) {
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          number,
+        },
+      })
+      if (updatedUser) {
+        return updatedUser
+      }
+    }
+  }
+
+  async deletePhoneNumberService(id: any) {
+    const number = await prisma.number.findUnique({
+      where: {
+        id,
+      },
+    })
+    if (number) {
+      const deleted = await prisma.number.delete({
+        where: {
+          id,
+        },
+      })
+      return deleted
+    } else throw ApiError.BadRequest
   }
 }
 

@@ -57,11 +57,10 @@ class User {
     try {
       const { refreshToken } = req.cookies
       const data = await authService.refresh(refreshToken)
-      res.cookie("refreshToken", data.refreshToken, {
+      res.cookie("refreshToken", data!.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       })
-      // console.log(data, "Data")
       return res.json(data)
     } catch (error) {
       next(error)

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction, response } from "express"
 import profileService from "../../services/profile/profileService"
 
 class ProfileController {
@@ -19,7 +19,6 @@ class ProfileController {
         ? req.file
         : { destination: "", filename: "", path: "", fieldname: "" }
 
-      console.log(JSON.parse(req.body.body))
       const response = await profileService.userDtoUpdateService(
         body,
         req.files
@@ -65,6 +64,42 @@ class ProfileController {
         userId
       )
       return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async updateUserContacts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId, comunicationMethod } = req.body
+      const data = await profileService.updatecomunicationMethodService(
+        userId,
+        comunicationMethod
+      )
+      return res.status(200).json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async addPhone(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId, number } = req.body
+      const data = await profileService.updatecomunicationMethodService(
+        userId,
+        number
+      )
+      return res.status(200).json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deletePhone(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.body
+      const data = await profileService.deletePhoneNumberService(id)
+      return res.status(200).json(data)
     } catch (error) {
       next(error)
     }

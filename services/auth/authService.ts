@@ -102,6 +102,9 @@ class AuthService {
     if (!user) {
       throw ApiError.BadRequest(`User with ${email} email does not exist`)
     }
+    const numbers = await prisma.number.findMany({
+      where: { userId: user.id },
+    })
     const isPassEqual = await bcrypt.compare(password, user.password)
     // check pass
     if (!isPassEqual) {
@@ -124,6 +127,7 @@ class AuthService {
       isStaff: user.isStaff,
       countryCode: user!.countryCode,
       number: user!.number,
+      numbers,
       seller: user!.seller,
       comunicationMethod: user!.comunicationMethod,
 
@@ -166,7 +170,12 @@ class AuthService {
       },
     })
 
-    const userDto = new UserDto(user!.email, user!.id, user!.isActivated)
+    const numbers = await prisma.number.findMany({
+      where: { userId: user?.id },
+    })
+
+    // const userDto = new UserDto(user!.email, user!.id, user!.isActivated)
+
     const obj = {
       userId: user!.id,
       email: user!.email,
@@ -182,6 +191,7 @@ class AuthService {
       isStaff: user!.isStaff,
       countryCode: user!.countryCode,
       number: user!.number,
+      numbers,
       seller: user!.seller,
       comunicationMethod: user!.comunicationMethod,
 

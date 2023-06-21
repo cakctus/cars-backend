@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Disc" ALTER COLUMN "diameter" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Tire" ALTER COLUMN "diameter" DROP NOT NULL,
+ALTER COLUMN "season" DROP NOT NULL,
+ALTER COLUMN "condition" DROP NOT NULL,
+ALTER COLUMN "brand" DROP NOT NULL;

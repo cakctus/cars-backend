@@ -13,6 +13,10 @@ import errorMiddleware from "./middleware/errors/errorMiddleware"
 import authRoutes from "./routes/auth/authRouter"
 import chatRoutes from "./routes/chat/chatRoutes"
 import profileRoutes from "./routes/profile/profileRoutes"
+import createAdController from "./routes/ads/create/createAdRoutes"
+import getAd from "./routes/ads/get/getAd"
+import detailRoutes from "./routes/detail/detailRoutes"
+import searchRoutes from "./routes/search/searchRoutes"
 
 // socket.io
 import { Server } from "socket.io"
@@ -40,6 +44,10 @@ app.use(
 app.use("/api", authRoutes)
 app.use("/api/chat", chatRoutes)
 app.use("/api/profile", profileRoutes)
+app.use("/api/create", createAdController)
+app.use("/api/created", getAd)
+app.use("/api/detail", detailRoutes)
+app.use("/api/search", searchRoutes)
 app.use(errorMiddleware)
 
 const start = async () => {

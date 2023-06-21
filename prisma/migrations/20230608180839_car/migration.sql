@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE "Batteries" ALTER COLUMN "carBrand" DROP NOT NULL,
+ALTER COLUMN "carSeries" DROP NOT NULL,
+ALTER COLUMN "applicability" DROP NOT NULL,
+ALTER COLUMN "positiveTerminal" DROP NOT NULL,
+ALTER COLUMN "housingType" DROP NOT NULL,
+ALTER COLUMN "electrolyteType" DROP NOT NULL,
+ALTER COLUMN "terminals" DROP NOT NULL,
+ALTER COLUMN "maintenanceLevel" DROP NOT NULL,
+ALTER COLUMN "mountingType" DROP NOT NULL;

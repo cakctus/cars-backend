@@ -16,6 +16,14 @@ class ApiError extends Error {
   static BadRequest(message: string, errors = []) {
     return new ApiError(400, message, errors)
   }
+
+  static DoesNotExist(message: string, errors = []) {
+    return new ApiError(404, message, errors)
+  }
+
+  static NumberAlreadyExists(message: string) {
+    return new ApiError(400, message)
+  }
 }
 
 export default ApiError

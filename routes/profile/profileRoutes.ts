@@ -23,5 +23,8 @@ router.post(
   userPhotos.single("userProfilePhoto"),
   profileControllers.updateUserProfilePhoto
 )
+router.post("/update-user-contacts", profileControllers.updateUserContacts)
+router.post("/add-phone", profileControllers.addPhone)
+router.post("/delete-phone", profileControllers.deletePhone)
 
 export default router

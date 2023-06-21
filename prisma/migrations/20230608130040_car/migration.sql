@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "Disc" ALTER COLUMN "type" DROP NOT NULL,
+ALTER COLUMN "holeCount" DROP NOT NULL,
+ALTER COLUMN "brand" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Tire" ALTER COLUMN "profileWidth" DROP NOT NULL,
+ALTER COLUMN "profileHeight" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "WheelsTire" ALTER COLUMN "contacts" DROP NOT NULL;
