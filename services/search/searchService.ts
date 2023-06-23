@@ -37,6 +37,41 @@ class SearchService {
     return {
       totalCount,
       cars,
+      limit,
+    }
+  }
+
+  async searchBus(data: any, page: any, limit: any) {
+    const skip = (page - 1) * limit
+    const totalCount = await prisma.busMicrobus.count({
+      where: buildWhereQuere(data),
+    })
+    const buses = await prisma.busMicrobus.findMany({
+      where: buildWhereQuere(data),
+      skip,
+      take: limit,
+    })
+    return {
+      totalCount,
+      buses,
+      limit,
+    }
+  }
+
+  async searchTruck(data: any, page: any, limit: any) {
+    const skip = (page - 1) * limit
+    const totalCount = await prisma.truck.count({
+      where: buildWhereQuere(data),
+    })
+    const car = await prisma.truck.findMany({
+      where: buildWhereQuere(data),
+      skip,
+      take: limit,
+    })
+    return {
+      totalCount,
+      car,
+      limit,
     }
   }
 }
