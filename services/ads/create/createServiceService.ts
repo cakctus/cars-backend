@@ -33,8 +33,6 @@ class createServiceService {
       repairArray.includes(index)
     )
 
-    console.log(carData)
-
     const user = await prisma.user.findFirst({
       where: {
         id,

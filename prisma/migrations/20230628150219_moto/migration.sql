@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Moto" ALTER COLUMN "brand" DROP NOT NULL,
+ALTER COLUMN "model" DROP NOT NULL;

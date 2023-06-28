@@ -178,7 +178,7 @@ model Moto {
   id                     Int      @id @default(autoincrement())
   uuid                   String?
   brand                  String
-  model                  String
+  model                  String?
   registration           String
   condition              String
   description            String?

@@ -94,48 +94,43 @@ class CreateAdService {
       return file.filename
     })
 
-    const createdCars = []
-
-    for (let i = 0; i < 10; i++) {
-      const createdCar = await prisma.car.create({
-        data: {
-          uuid: uuidv4(),
-          brand: String(brand),
-          model,
-          registration,
-          generation,
-          modification,
-          condition,
-          description,
-          region,
-          price,
-          currency,
-          author,
-          year,
-          seats,
-          steering,
-          bodyType,
-          doors,
-          mileage,
-          mileageType,
-          engineVolume,
-          enginePower,
-          fuelType,
-          transmission,
-          photo,
-          drive,
-          contacts,
-          User: {
-            connect: {
-              id,
-            },
+    const createdCar = await prisma.car.create({
+      data: {
+        uuid: uuidv4(),
+        brand: String(brand),
+        model,
+        registration,
+        generation,
+        modification,
+        condition,
+        description,
+        region,
+        price,
+        currency,
+        author,
+        year,
+        seats,
+        steering,
+        bodyType,
+        doors,
+        mileage,
+        mileageType,
+        engineVolume,
+        enginePower,
+        fuelType,
+        transmission,
+        photo,
+        drive,
+        contacts,
+        User: {
+          connect: {
+            id,
           },
         },
-      })
-      createdCars.push(createdCar)
-    }
+      },
+    })
 
-    return createdCars
+    return createdCar
   }
 
   async createMotoAdService(
