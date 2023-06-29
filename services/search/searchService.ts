@@ -335,7 +335,7 @@ class SearchService {
 
   async searchService(data: any, page: any, limit: any) {
     const skip = (parseInt(page) - 1) * parseInt(limit)
-    console.log(page)
+
     const totalCount = await prisma.autoService.count({
       where: buildWhereQuereService(data),
     })

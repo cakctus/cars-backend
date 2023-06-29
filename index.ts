@@ -17,6 +17,7 @@ import createAdController from "./routes/ads/create/createAdRoutes"
 import getAd from "./routes/ads/get/getAd"
 import detailRoutes from "./routes/detail/detailRoutes"
 import searchRoutes from "./routes/search/searchRoutes"
+import allAdsRoutes from "./routes/ads/allAds/allAdsRoutes"
 
 // socket.io
 import { Server } from "socket.io"
@@ -48,6 +49,7 @@ app.use("/api/create", createAdController)
 app.use("/api/created", getAd)
 app.use("/api/detail", detailRoutes)
 app.use("/api/search", searchRoutes)
+app.use("/api", allAdsRoutes)
 app.use(errorMiddleware)
 
 const start = async () => {
