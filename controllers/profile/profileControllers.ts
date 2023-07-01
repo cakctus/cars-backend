@@ -23,6 +23,7 @@ class ProfileController {
         body,
         req.files
       )
+
       return res.status(200).json(response)
     } catch (error) {
       next(error)

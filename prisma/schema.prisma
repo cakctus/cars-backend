@@ -84,35 +84,38 @@ model Chat {
 }
 
 model Car {
-  id           Int      @id @default(autoincrement())
-  uuid         String?
-  brand        String
-  model        String
-  registration String
-  generation   String
-  modification String
-  condition    String
-  description  String?
-  region       String
-  price        String
-  currency     String
-  author       String
-  year         String
-  seats        String
-  steering     String
-  bodyType     String
-  doors        String?
-  mileage      String
-  mileageType  String
-  engineVolume String
-  enginePower  String?
-  fuelType     String
-  transmission String
-  drive        String
-  photo        String[]
-  contacts     String?
-  User         User?    @relation(fields: [userId], references: [id])
-  userId       Int?
+  id             Int      @id @default(autoincrement())
+  uuid           String?
+  brand          String
+  model          String
+  registration   String
+  generation     String
+  modification   String
+  modelId        Int
+  generationId   Int
+  modificationId Int
+  condition      String
+  description    String?
+  region         String
+  price          String
+  currency       String
+  author         String
+  year           String
+  seats          String
+  steering       String
+  bodyType       String
+  doors          String?
+  mileage        String
+  mileageType    String
+  engineVolume   String
+  enginePower    String?
+  fuelType       String
+  transmission   String
+  drive          String
+  photo          String[]
+  contacts       String?
+  User           User?    @relation(fields: [userId], references: [id])
+  userId         Int?
 }
 
 model BusMicrobus {
