@@ -149,6 +149,7 @@ class CreateAdService {
     const {
       brand,
       model,
+      modelId,
       registration,
       condition,
       description,
@@ -225,6 +226,7 @@ class CreateAdService {
         uuid: uuidv4(),
         brand,
         model,
+        modelId,
         registration,
         motorcycleType,
         condition,

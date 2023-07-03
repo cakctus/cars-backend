@@ -182,6 +182,7 @@ model Moto {
   uuid                   String?
   brand                  String
   model                  String?
+  modelId                String?
   registration           String
   condition              String
   description            String?
