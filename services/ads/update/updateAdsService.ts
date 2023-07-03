@@ -89,7 +89,7 @@ class UpdateAdsService {
     })
 
     const { photo, ...newCar } = updateCar
-    // console.log(photo)
+
     if (car.userId === user.id) {
       if (photoList.length > 0) {
         const carToUpdate = await prisma.car.update({
