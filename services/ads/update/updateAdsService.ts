@@ -906,8 +906,8 @@ class UpdateAdsService {
     })
 
     const { photo, tire, disc, ...newCar } = updateCar
-    const { id: discIt, ...newDisc } = disc
-    const { id: tireId, ...newTire } = disc
+    const { id: discId, ...newDisc } = disc
+    const { id: tireId, ...newTire } = tire
 
     const updatedDisc = await prisma.disc.update({
       where: {
@@ -916,7 +916,7 @@ class UpdateAdsService {
       data: newDisc,
     })
 
-    const updatedTire = await prisma.disc.update({
+    const updatedTire = await prisma.tire.update({
       where: {
         id: car?.tire?.id,
       },
@@ -932,6 +932,8 @@ class UpdateAdsService {
           data: {
             ...newCar,
             photo: photoList,
+            discId: updatedDisc.id,
+            tireId: updatedTire.id,
           },
         })
         if (carToUpdate) {
@@ -952,20 +954,516 @@ class UpdateAdsService {
         data: {
           ...newCar,
           photo: photo,
-          // ...updatedDisc,
-          disc: {
-            connect: {
-              id: updatedDisc.id, // Reconnect the updated Disc to the WheelsTire
-            },
-          },
-          tire: {
-            connect: {
-              id: updatedTire.id, // Reconnect the updated Tire to the WheelsTire
-            },
-          },
+          discId: updatedDisc.id,
+          tireId: updatedTire.id,
         },
       })
-      console.log(carToUpdate)
+      return carToUpdate
+    }
+  }
+
+  getCarPartsToUpdate = async (id: any, userId: any) => {
+    const car = await prisma.carParts.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    if (car.userId === user.id) {
+      return { msg: "success", carToUpdate: car }
+    }
+
+    return {
+      msg: "some error",
+    }
+  }
+
+  updateCarParts = async (id: any, userId: any, updateCar: any, files: any) => {
+    const car = await prisma.carParts.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    const photoList = files.map((file: any) => {
+      return file.filename
+    })
+
+    const { photo, ...newCar } = updateCar
+
+    if (car.userId === user.id) {
+      if (photoList.length > 0) {
+        const carToUpdate = await prisma.carParts.update({
+          where: {
+            id,
+          },
+          data: {
+            ...newCar,
+            photo: photoList,
+          },
+        })
+        if (carToUpdate) {
+          const prevPhotoPaths = car.photo.map((filename) =>
+            path.join("media/pics/parts", filename)
+          )
+
+          prevPhotoPaths.forEach((prevPhotoPath) => {
+            fs.unlinkSync(prevPhotoPath)
+          })
+        }
+        return carToUpdate
+      }
+      const carToUpdate = await prisma.carParts.update({
+        where: {
+          id,
+        },
+        data: {
+          ...newCar,
+          photo: photo,
+        },
+      })
+      return carToUpdate
+    }
+  }
+
+  getTruckPartsToUpdate = async (id: any, userId: any) => {
+    const car = await prisma.truckParts.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    if (car.userId === user.id) {
+      return { msg: "success", carToUpdate: car }
+    }
+
+    return {
+      msg: "some error",
+    }
+  }
+
+  updateTruckParts = async (
+    id: any,
+    userId: any,
+    updateCar: any,
+    files: any
+  ) => {
+    const car = await prisma.truckParts.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    const photoList = files.map((file: any) => {
+      return file.filename
+    })
+
+    const { photo, ...newCar } = updateCar
+
+    if (car.userId === user.id) {
+      if (photoList.length > 0) {
+        const carToUpdate = await prisma.carParts.update({
+          where: {
+            id,
+          },
+          data: {
+            ...newCar,
+            photo: photoList,
+          },
+        })
+        if (carToUpdate) {
+          const prevPhotoPaths = car.photo.map((filename) =>
+            path.join("media/pics/truck_parts", filename)
+          )
+
+          prevPhotoPaths.forEach((prevPhotoPath) => {
+            fs.unlinkSync(prevPhotoPath)
+          })
+        }
+        return carToUpdate
+      }
+      const carToUpdate = await prisma.truckParts.update({
+        where: {
+          id,
+        },
+        data: {
+          ...newCar,
+          photo: photo,
+        },
+      })
+      return carToUpdate
+    }
+  }
+
+  getBatteryToUpdate = async (id: any, userId: any) => {
+    const car = await prisma.batteries.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    if (car.userId === user.id) {
+      return { msg: "success", carToUpdate: car }
+    }
+
+    return {
+      msg: "some error",
+    }
+  }
+
+  updateBattery = async (id: any, userId: any, updateCar: any, files: any) => {
+    const car = await prisma.batteries.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    const photoList = files.map((file: any) => {
+      return file.filename
+    })
+
+    const { photo, ...newCar } = updateCar
+
+    if (car.userId === user.id) {
+      if (photoList.length > 0) {
+        const carToUpdate = await prisma.batteries.update({
+          where: {
+            id,
+          },
+          data: {
+            ...newCar,
+            photo: photoList,
+          },
+        })
+        if (carToUpdate) {
+          const prevPhotoPaths = car.photo.map((filename) =>
+            path.join("media/pics/battery", filename)
+          )
+
+          prevPhotoPaths.forEach((prevPhotoPath) => {
+            fs.unlinkSync(prevPhotoPath)
+          })
+        }
+        return carToUpdate
+      }
+      const carToUpdate = await prisma.batteries.update({
+        where: {
+          id,
+        },
+        data: {
+          ...newCar,
+          photo: photo,
+        },
+      })
+      return carToUpdate
+    }
+  }
+
+  getServiceToUpdate = async (id: any, userId: any) => {
+    const car = await prisma.autoService.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        Service: true,
+        Repair: true,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    if (car.userId === user.id) {
+      return { msg: "success", carToUpdate: car }
+    }
+
+    return {
+      msg: "some error",
+    }
+  }
+
+  updateService = async (id: any, userId: any, updateCar: any, files: any) => {
+    const car = await prisma.autoService.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        Service: true,
+        Repair: true,
+      },
+    })
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    })
+
+    if (!car) {
+      throw ApiError.DoesNotExist(
+        `Обьявления с идентификатором ${id} не существует. \n Nu există niciun anunț cu id ${id}.`
+      )
+    }
+
+    if (!user) {
+      throw ApiError.DoesNotExist(
+        `Пользователь с идентификатором ${userId} не существует. \n Utilizatorul cu id ${id} nu există.`
+      )
+    }
+
+    if (!(car.userId === user.id)) {
+      throw ApiError.BadRequest(
+        "Чтобы обновлять эту статью, вы должны быть ее автором.\n Pentru a actualiza acest articol, trebuie să fii autorul."
+      )
+    }
+
+    const photoList = files.map((file: any) => {
+      return file.filename
+    })
+
+    const {
+      id: articleId,
+      userId: articleUserId,
+      serviceId: articleServiceId,
+      repairId: articleRepairId,
+      photo,
+      serviceArray,
+      repairArray,
+      serviceCategory,
+      repairCategory,
+      Repair,
+      Service,
+      ...newCar
+    } = updateCar
+    // const { serviceCategory } = newCar
+    // const { repairCategory } = newCar
+
+    // const selectedServices = serviceCategory.filter((_: any, index: any) =>
+    //   serviceArray.includes(index)
+    // )
+
+    // const selectedRepair = repairCategory.filter((_: any, index: any) =>
+    //   repairArray.includes(index)
+    // )
+
+    const service = await prisma.service.update({
+      where: {
+        id: car?.Service?.id,
+      },
+      data: {
+        ...Service,
+      },
+    })
+
+    const repair = await prisma.repair.update({
+      where: {
+        id: car?.Repair?.id,
+      },
+      data: {
+        ...Repair,
+      },
+    })
+
+    if (car.userId === user.id) {
+      if (photoList.length > 0) {
+        const carToUpdate = await prisma.autoService.update({
+          where: {
+            id,
+          },
+          data: {
+            ...newCar,
+            photo: photoList,
+            serviceId: service.id,
+            repairId: repair.id,
+          },
+        })
+        if (carToUpdate) {
+          const prevPhotoPaths = car.photo.map((filename) =>
+            path.join("media/pics/service", filename)
+          )
+
+          prevPhotoPaths.forEach((prevPhotoPath) => {
+            fs.unlinkSync(prevPhotoPath)
+          })
+        }
+        return carToUpdate
+      }
+      const carToUpdate = await prisma.autoService.update({
+        where: {
+          id,
+        },
+        data: {
+          ...newCar,
+          photo: photo,
+          serviceId: service.id,
+          repairId: repair.id,
+        },
+      })
       return carToUpdate
     }
   }

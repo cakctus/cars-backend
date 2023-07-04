@@ -298,6 +298,162 @@ class UpdateAdController {
       next(error)
     }
   }
+
+  getCarPartsToUpdate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id, userId } = req.body
+      const response = await updateAdsService.getCarPartsToUpdate(
+        Number(id),
+        Number(userId)
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  updateCarParts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = JSON.parse(req.body.data)
+      const { countryCode, photos, ...dataToUpdate } = data
+      const { id, userId } = req.body
+      const files = req.files
+
+      const response = await updateAdsService.updateCarParts(
+        Number(id),
+        Number(userId),
+        dataToUpdate,
+        files
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  getTruckPartsToUpdate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id, userId } = req.body
+      const response = await updateAdsService.getTruckPartsToUpdate(
+        Number(id),
+        Number(userId)
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  updateTruckParts = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = JSON.parse(req.body.data)
+      const { countryCode, photos, ...dataToUpdate } = data
+      const { id, userId } = req.body
+      const files = req.files
+
+      const response = await updateAdsService.updateTruckParts(
+        Number(id),
+        Number(userId),
+        dataToUpdate,
+        files
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  getBatteryToUpdate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id, userId } = req.body
+      const response = await updateAdsService.getBatteryToUpdate(
+        Number(id),
+        Number(userId)
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  updateBattery = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = JSON.parse(req.body.data)
+      const { countryCode, photos, ...dataToUpdate } = data
+      const { id, userId } = req.body
+      const files = req.files
+
+      const response = await updateAdsService.updateBattery(
+        Number(id),
+        Number(userId),
+        dataToUpdate,
+        files
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  getServiceToUpdate = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id, userId } = req.body
+      const response = await updateAdsService.getServiceToUpdate(
+        Number(id),
+        Number(userId)
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  updateService = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = JSON.parse(req.body.data)
+      const { countryCode, photos, ...dataToUpdate } = data
+      const { id, userId } = req.body
+      const files = req.files
+
+      const response = await updateAdsService.updateService(
+        Number(id),
+        Number(userId),
+        dataToUpdate,
+        files
+      )
+
+      return res.status(200).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new UpdateAdController()

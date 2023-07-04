@@ -43,10 +43,11 @@ model User {
   battery            Batteries[]
   mirrors            CarMirrorsGlassOptics[]
   Token              Token[]
-  wheelTire          WheelsTire[]
-  autoService        AutoService[]
-  Message            Message[]
-  Chat               Chat[]
+
+  autoService AutoService[]
+  Message     Message[]
+  Chat        Chat[]
+  wheelTire   WheelsTire[]
 }
 
 model Number {
@@ -253,7 +254,7 @@ model Construction {
 }
 
 model WheelsTire {
-  id             Int      @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   uuid           String?
   wheelTireTypes String?
   purpose        String?
@@ -262,14 +263,18 @@ model WheelsTire {
   region         String
   price          String
   currency       String
-  disc           Disc?    @relation(fields: [DiscId], references: [id])
-  tire           Tire?    @relation(fields: [tireId], references: [id])
-  photo          String[]
-  contacts       String?
-  DiscId         Int?
-  tireId         Int?
-  User           User?    @relation(fields: [userId], references: [id])
-  userId         Int?
+
+  photo    String[]
+  contacts String?
+
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?
+
+  disc Disc? @relation(fields: [discId], references: [id])
+  tire Tire? @relation(fields: [tireId], references: [id])
+
+  tireId Int?
+  discId Int?
 }
 
 model Disc {
@@ -305,6 +310,9 @@ model CarParts {
   model          String
   generation     String
   modification   String
+  modelId        String
+  generationId   String
+  modificationId String
   partsCondition String
   photo          String[]
   contacts       String
@@ -355,6 +363,7 @@ model Batteries {
   batteryBrands    String
   brand            String
   model            String
+  modelId          String
   carSeries        String?
   applicability    String?
   positiveTerminal String?

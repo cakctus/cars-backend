@@ -8,6 +8,10 @@ import createTractorPhotoMiddleware from "../../../middleware/files/createTracto
 import createTrailerPhotoMiddleware from "../../../middleware/files/createTrailerPhotoMiddleware"
 import createConstructionPhotoMiddleware from "../../../middleware/files/createConstructionPhotoMiddleware"
 import createTirePhotoMiddleware from "../../../middleware/files/creatTirePhotosMiddleware"
+import createPartsPhotoMiddleware from "../../../middleware/files/createPartsPhotoMiddleware"
+import createTruckPartsPhotoMiddleware from "../../../middleware/files/createTruckPartsPhotoMiddleware"
+import createBatteryPhotoMiddleware from "../../../middleware/files/createBatteryPhotoMiddleware"
+import createServicePhotoMiddleware from "../../../middleware/files/createServicePhotoMiddleware"
 
 import updateAdController from "../../../controllers/ads/update/updateAdController"
 
@@ -75,6 +79,38 @@ router.post(
   "/update-wheel-tire",
   createTirePhotoMiddleware.array("files"),
   updateAdController.updateWheelTire
+)
+
+router.post("/car-parts", updateAdController.getCarPartsToUpdate)
+
+router.post(
+  "/update-car-parts",
+  createPartsPhotoMiddleware.array("files"),
+  updateAdController.updateCarParts
+)
+
+router.post("/truck-parts", updateAdController.getTruckPartsToUpdate)
+
+router.post(
+  "/update-truck-parts",
+  createTruckPartsPhotoMiddleware.array("files"),
+  updateAdController.updateTruckParts
+)
+
+router.post("/battery", updateAdController.getBatteryToUpdate)
+
+router.post(
+  "/update-battery",
+  createBatteryPhotoMiddleware.array("files"),
+  updateAdController.updateBattery
+)
+
+router.post("/service", updateAdController.getServiceToUpdate)
+
+router.post(
+  "/update-service",
+  createServicePhotoMiddleware.array("files"),
+  updateAdController.updateService
 )
 
 export default router
