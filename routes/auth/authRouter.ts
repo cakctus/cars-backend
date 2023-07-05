@@ -9,7 +9,7 @@ router.post("/login", authController.login)
 router.post("/logout", authController.logout)
 router.get("/activate/:link", authController.activate)
 router.get("/refresh", authController.refresh)
-// router.get("/users", AuthMiddleware.checkAuth, authController.users)
-router.get("/users", authController.users)
+router.get("/users", AuthMiddleware.checkAuth, authController.users)
+// router.get("/users", authController.users)
 
 export default router

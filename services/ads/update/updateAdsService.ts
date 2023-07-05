@@ -1400,16 +1400,6 @@ class UpdateAdsService {
       Service,
       ...newCar
     } = updateCar
-    // const { serviceCategory } = newCar
-    // const { repairCategory } = newCar
-
-    // const selectedServices = serviceCategory.filter((_: any, index: any) =>
-    //   serviceArray.includes(index)
-    // )
-
-    // const selectedRepair = repairCategory.filter((_: any, index: any) =>
-    //   repairArray.includes(index)
-    // )
 
     const service = await prisma.service.update({
       where: {
