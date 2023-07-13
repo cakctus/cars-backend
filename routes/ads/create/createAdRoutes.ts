@@ -27,9 +27,12 @@ import createServiceController from "../../../controllers/ads/create/createServi
 
 const router: Router = Router()
 
+import FilesMiddleware from "../../../middleware/file-error/filesMiddleware"
+
 router.post(
   "/create-ad",
   createAdPhoto.array("files"),
+  FilesMiddleware.checkLengthFiles,
   createAdController.createAd
 )
 router.post(

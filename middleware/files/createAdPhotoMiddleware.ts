@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 const createAdPhoto = multer({
   storage,
   limits: {
-    fieldSize: 10 * 1024 * 1024, // 10MB (adjust the value as per your requirement)
+    fieldSize: 30 * 1024 * 1024, // 30MB (adjust the value as per your requirement)
   },
 })
 

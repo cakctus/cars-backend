@@ -9,7 +9,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!car)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -22,7 +35,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!bus)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -35,7 +61,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!truck)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -44,16 +83,29 @@ class DetailService {
   }
 
   async getMoto(id: any) {
-    const truck = await prisma.moto.findFirst({
+    const moto = await prisma.moto.findFirst({
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
-    if (!truck)
+
+    if (!moto)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
       )
-    return truck
+    return moto
   }
 
   async getTractor(id: any) {
@@ -61,7 +113,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!truck)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -74,7 +139,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!trailer)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -83,16 +161,29 @@ class DetailService {
   }
 
   async getConstruction(id: any) {
-    const trailer = await prisma.construction.findFirst({
+    const construction = await prisma.construction.findFirst({
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
-    if (!trailer)
+
+    if (!construction)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
       )
-    return trailer
+    return construction
   }
 
   async getDiscTire(id: any) {
@@ -101,6 +192,16 @@ class DetailService {
         id: Number(id),
       },
       include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
         tire: true,
         disc: true,
       },
@@ -113,16 +214,28 @@ class DetailService {
   }
 
   async getPart(id: any) {
-    const trailer = await prisma.carParts.findFirst({
+    const carParts = await prisma.carParts.findFirst({
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
-    if (!trailer)
+    if (!carParts)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
       )
-    return trailer
+    return carParts
   }
 
   async getTruckPart(id: any) {
@@ -130,7 +243,20 @@ class DetailService {
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
+
     if (!trailer)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
@@ -139,24 +265,46 @@ class DetailService {
   }
 
   async getBattery(id: any) {
-    const trailer = await prisma.batteries.findFirst({
+    const batteries = await prisma.batteries.findFirst({
       where: {
         id: Number(id),
       },
+      include: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
+      },
     })
-    if (!trailer)
+    if (!batteries)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
       )
-    return trailer
+    return batteries
   }
 
   async getService(id: any) {
-    const trailer = await prisma.autoService.findFirst({
+    const autoService = await prisma.autoService.findFirst({
       where: {
         id: Number(id),
       },
       select: {
+        User: {
+          select: {
+            id: true,
+            dateJoined: true,
+            userPhoto: true,
+            comunicationMethod: true,
+            countryCode: true,
+            email: true,
+          },
+        },
         Service: true,
         Repair: true,
         title: true,
@@ -166,13 +314,14 @@ class DetailService {
         currency: true,
         photo: true,
         contacts: true,
+        createdAt: true,
       },
     })
-    if (!trailer)
+    if (!autoService)
       throw ApiError.DoesNotExist(
         "Oops! It looks like the page you were trying to reach does not exist."
       )
-    return trailer
+    return autoService
   }
 }
 

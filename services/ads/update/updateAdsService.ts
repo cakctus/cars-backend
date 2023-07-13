@@ -6,6 +6,8 @@ import path from "path"
 const prisma = new PrismaClient()
 
 class UpdateAdsService {
+  photoLength: number = 35
+
   getCarToUpdate = async (id: any, userId: any) => {
     const car = await prisma.car.findFirst({
       where: {
@@ -90,6 +92,12 @@ class UpdateAdsService {
 
     const { photo, ...newCar } = updateCar
 
+    if (photo.length && photo.length > this.photoLength) {
+      throw ApiError.BadRequest(
+        "Максимально допустимое количество фотографий 35. Numărul maxim de fotografii permis este de 35"
+      )
+    }
+
     if (car.userId === user.id) {
       if (photoList.length > 0) {
         const carToUpdate = await prisma.car.update({
@@ -102,14 +110,21 @@ class UpdateAdsService {
           },
         })
         if (carToUpdate) {
-          const prevPhotoPaths = car.photo.map((filename) =>
-            path.join("media/pics/cars", filename)
-          )
+          try {
+            const prevPhotoPaths = car.photo.map((filename) =>
+              path.join("media/pics/cars", filename)
+            )
 
-          // Delete previous photos from the folder
-          prevPhotoPaths.forEach((prevPhotoPath) => {
-            fs.unlinkSync(prevPhotoPath)
-          })
+            prevPhotoPaths.forEach((prevPhotoPath) => {
+              try {
+                fs.unlinkSync(prevPhotoPath)
+              } catch (error: any) {
+                console.log(error.message)
+              }
+            })
+          } catch (error) {
+            console.log(error)
+          }
         }
         return carToUpdate
       }
@@ -209,6 +224,12 @@ class UpdateAdsService {
 
     const { photo, ...newCar } = updateCar
 
+    if (photo.length && photo.length > this.photoLength) {
+      throw ApiError.BadRequest(
+        "Максимально допустимое количество фотографий 35. Numărul maxim de fotografii permis este de 35"
+      )
+    }
+
     if (car.userId === user.id) {
       if (photoList.length > 0) {
         const carToUpdate = await prisma.busMicrobus.update({
@@ -221,14 +242,20 @@ class UpdateAdsService {
           },
         })
         if (carToUpdate) {
-          const prevPhotoPaths = car.photo.map((filename) =>
-            path.join("media/pics/bus", filename)
-          )
-
-          // Delete previous photos from the folder
-          prevPhotoPaths.forEach((prevPhotoPath) => {
-            fs.unlinkSync(prevPhotoPath)
-          })
+          try {
+            const prevPhotoPaths = car.photo.map((filename) =>
+              path.join("media/pics/bus", filename)
+            )
+            prevPhotoPaths.forEach((prevPhotoPath) => {
+              try {
+                fs.unlinkSync(prevPhotoPath)
+              } catch (error: any) {
+                console.log(error.message)
+              }
+            })
+          } catch (error) {
+            console.log(error)
+          }
         }
         return carToUpdate
       }
@@ -328,6 +355,12 @@ class UpdateAdsService {
 
     const { photo, ...newCar } = updateCar
 
+    if (photo.length && photo.length > 35) {
+      throw ApiError.BadRequest(
+        "Максимально допустимое количество фотографий 35. Numărul maxim de fotografii permis este de 35"
+      )
+    }
+
     if (car.userId === user.id) {
       if (photoList.length > 0) {
         const carToUpdate = await prisma.truck.update({
@@ -340,14 +373,20 @@ class UpdateAdsService {
           },
         })
         if (carToUpdate) {
-          const prevPhotoPaths = car.photo.map((filename) =>
-            path.join("media/pics/truck", filename)
-          )
-
-          // Delete previous photos from the folder
-          prevPhotoPaths.forEach((prevPhotoPath) => {
-            fs.unlinkSync(prevPhotoPath)
-          })
+          try {
+            const prevPhotoPaths = car.photo.map((filename) =>
+              path.join("media/pics/truck", filename)
+            )
+            prevPhotoPaths.forEach((prevPhotoPath) => {
+              try {
+                fs.unlinkSync(prevPhotoPath)
+              } catch (error: any) {
+                console.log(error.message)
+              }
+            })
+          } catch (error: any) {
+            console.log(error.message)
+          }
         }
         return carToUpdate
       }
@@ -441,6 +480,12 @@ class UpdateAdsService {
 
     const { photo, ...newCar } = updateCar
 
+    if (photo.length && photo.length > 35) {
+      throw ApiError.BadRequest(
+        "Максимально допустимое количество фотографий 35. Numărul maxim de fotografii permis este de 35"
+      )
+    }
+
     if (car.userId === user.id) {
       if (photoList.length > 0) {
         const carToUpdate = await prisma.moto.update({
@@ -452,14 +497,22 @@ class UpdateAdsService {
             photo: photoList,
           },
         })
-        if (carToUpdate) {
-          const prevPhotoPaths = car.photo.map((filename) =>
-            path.join("media/pics/moto", filename)
-          )
 
-          prevPhotoPaths.forEach((prevPhotoPath) => {
-            fs.unlinkSync(prevPhotoPath)
-          })
+        if (carToUpdate) {
+          try {
+            const prevPhotoPaths = car.photo.map((filename) =>
+              path.join("media/pics/moto", filename)
+            )
+            prevPhotoPaths.forEach((prevPhotoPath) => {
+              try {
+                fs.unlinkSync(prevPhotoPath)
+              } catch (error: any) {
+                console.log(error.message)
+              }
+            })
+          } catch (error: any) {
+            console.log(error.message)
+          }
         }
         return carToUpdate
       }

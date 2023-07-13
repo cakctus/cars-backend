@@ -9,6 +9,7 @@ class CreateAdController {
       const communicationMethod = JSON.parse(req.body.communicationMethod)
       const number = JSON.parse(req.body.number)
       const id = JSON.parse(req.body.id)
+
       const response = await adsService.createAd(
         id,
         data,

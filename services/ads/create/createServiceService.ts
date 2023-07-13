@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid"
 const prisma = new PrismaClient()
 
 class createServiceService {
+  photoLength: number = 35
+
   async createAd(
     id: any,
     carData: any,
@@ -87,6 +89,12 @@ class createServiceService {
     const photo = files.map((file: any) => {
       return file.filename
     })
+
+    if (photo.length && photo.length > this.photoLength) {
+      throw ApiError.BadRequest(
+        "Максимально допустимое количество фотографий 35. Numărul maxim de fotografii permis este de 35"
+      )
+    }
 
     const service = await prisma.service.create({
       data: {

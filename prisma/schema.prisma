@@ -115,6 +115,7 @@ model Car {
   drive          String
   photo          String[]
   contacts       String?
+  createdAt      DateTime @default(now())
   User           User?    @relation(fields: [userId], references: [id])
   userId         Int?
 }
@@ -143,6 +144,7 @@ model BusMicrobus {
   drive        String?
   photo        String[]
   contacts     String?
+  createdAt    DateTime @default(now())
   User         User?    @relation(fields: [userId], references: [id])
   userId       Int?
 }
@@ -174,6 +176,7 @@ model Truck {
   totalWeighTitle        String
   photo                  String[]
   contacts               String?
+  createdAt              DateTime @default(now())
   User                   User?    @relation(fields: [userId], references: [id])
   userId                 Int?
 }
@@ -199,6 +202,7 @@ model Moto {
   motorcycleTransmission String
   photo                  String[]
   contacts               String?
+  createdAt              DateTime @default(now())
   User                   User?    @relation(fields: [userId], references: [id])
   userId                 Int?
 }
@@ -212,10 +216,11 @@ model Agriculture {
   region       String
   price        String
   currency     String
-  manufacturer String
+  manufacturer String?
   tractorType  String
   photo        String[]
   contacts     String?
+  createdAt    DateTime @default(now())
   User         User?    @relation(fields: [userId], references: [id])
   userId       Int?
 }
@@ -233,6 +238,7 @@ model Trailer {
   trailerCondition String
   photo            String[]
   contacts         String?
+  createdAt        DateTime @default(now())
   User             User?    @relation(fields: [userId], references: [id])
   userId           Int?
 }
@@ -249,6 +255,7 @@ model Construction {
   condition         String
   photo             String[]
   contacts          String?
+  createdAt         DateTime @default(now())
   User              User?    @relation(fields: [userId], references: [id])
   userId            Int?
 }
@@ -267,8 +274,9 @@ model WheelsTire {
   photo    String[]
   contacts String?
 
-  User   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
 
   disc Disc? @relation(fields: [discId], references: [id])
   tire Tire? @relation(fields: [tireId], references: [id])
@@ -315,7 +323,8 @@ model CarParts {
   modificationId String
   partsCondition String
   photo          String[]
-  contacts       String
+  contacts       String?
+  createdAt      DateTime @default(now())
   User           User?    @relation(fields: [userId], references: [id])
   userId         Int?
 }
@@ -332,7 +341,8 @@ model TruckParts {
   brand          String
   partsCondition String
   photo          String[]
-  contacts       String
+  contacts       String?
+  createdAt      DateTime @default(now())
   User           User?    @relation(fields: [userId], references: [id])
   userId         Int?
 }
@@ -347,7 +357,7 @@ model CarMirrorsGlassOptics {
   currency    String
   type        String
   photo       String[]
-  contacts    String
+  contacts    String?
   User        User?    @relation(fields: [userId], references: [id])
   userId      Int?
 }
@@ -375,7 +385,8 @@ model Batteries {
   partsCondition   String
   capacity         String
   photo            String[]
-  contacts         String
+  contacts         String?
+  createdAt        DateTime @default(now())
   User             User?    @relation(fields: [userId], references: [id])
   userId           Int?
 }
@@ -389,14 +400,14 @@ model AutoService {
   price       String
   currency    String
   photo       String[]
-  contacts    String
-
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
-  Service   Service? @relation(fields: [serviceId], references: [id])
-  serviceId Int?
-  Repair    Repair?  @relation(fields: [repairId], references: [id])
-  repairId  Int?
+  contacts    String?
+  createdAt   DateTime @default(now())
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
+  Service     Service? @relation(fields: [serviceId], references: [id])
+  serviceId   Int?
+  Repair      Repair?  @relation(fields: [repairId], references: [id])
+  repairId    Int?
 }
 
 model Service {

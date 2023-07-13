@@ -14,7 +14,6 @@ class AuthMiddleware {
       // split acces token and check
       const accesToken = authHeader.split(" ")[1]
 
-      console.log(accesToken)
       if (accesToken === "null") {
         return next(ApiError.UnauthorizedError())
       }
